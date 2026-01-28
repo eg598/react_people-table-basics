@@ -11,7 +11,7 @@ export const PersonLink: React.FC<Props> = ({ person }) => {
   const { peopleFromServer } = usePeople();
   const { selectedPerson } = useParams();
 
-  const validateFather = (name: string): boolean => {
+  const personExists = (name: string): boolean => {
     const names = [...peopleFromServer].map(p => p.name);
 
     return names.includes(name);
@@ -25,11 +25,7 @@ export const PersonLink: React.FC<Props> = ({ person }) => {
     <tr
       data-cy="person"
       key={person.name}
-      className={
-        selectedPerson?.replace('#/people/', '') === person.slug
-          ? `has-background-warning`
-          : ''
-      }
+      className={selectedPerson === person.slug ? `has-background-warning` : ''}
     >
       <td>
         <NavLink
@@ -45,7 +41,7 @@ export const PersonLink: React.FC<Props> = ({ person }) => {
       <td>{person.died}</td>
       <td>
         {person.motherName ? (
-          validateFather(person.motherName) ? (
+          personExists(person.motherName) ? (
             <NavLink
               to={`/people/${findPerson(person.motherName)?.slug}`}
               className="has-text-danger"
@@ -61,7 +57,7 @@ export const PersonLink: React.FC<Props> = ({ person }) => {
       </td>
       <td>
         {person.fatherName ? (
-          validateFather(person.fatherName) ? (
+          personExists(person.fatherName) ? (
             <NavLink to={`/people/${findPerson(person.fatherName)?.slug}`}>
               {person.fatherName}
             </NavLink>
